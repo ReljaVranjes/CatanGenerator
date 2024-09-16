@@ -1,0 +1,42 @@
+<div class="split-container">
+    <div class="left-panel">
+      <h1>Catan Board Generator</h1>
+  
+      <div class="button-group">
+        <button class="generate-board-btn" (click)="GenerateBoard()">Generate Board</button>
+        <button class="options-btn">Options</button>
+      </div>
+  
+      <button class="generate-order-btn" (click)="GenerateOrderOfPlay()">Generate Order of Play</button>
+  
+      <!-- Order of Play Box with Borders -->
+      <div *ngIf="orderOfPlay && orderOfPlay.length > 0" class="order-of-play-box">
+        <div *ngFor="let player of orderOfPlay; let i = index" class="player-item" [ngClass]="getPlayerColorClass(player)">
+          <span class="player-text">{{ i + 1 }}. {{ player }}</span>
+          <!-- Home Icon (example using Font Awesome) -->
+          <i class="fas fa-home player-icon"></i>
+        </div>
+      </div>
+    </div>
+  
+    <div class="right-panel">
+      <div class="container">
+        <div class="image-container">
+          <div *ngFor="let row of rows; let i = index" [ngStyle]="getMarginForRow(i)">
+            <div class="image-wrapper" *ngFor="let tile of row">
+              <img [src]="getImageUrl(tile.type)" [alt]="tile.type" />
+              <div *ngIf="tile.diceNumber > 0"
+                [ngClass]="{
+                  'dice-number': tile.diceNumber > 0,
+                  'hide-if-zero': tile.diceNumber === 0,
+                  'red-dice-number': tile.diceNumber === 6 || tile.diceNumber === 8
+                }">
+                {{ tile.diceNumber }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

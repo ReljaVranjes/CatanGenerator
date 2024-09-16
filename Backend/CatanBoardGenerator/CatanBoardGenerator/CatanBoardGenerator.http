@@ -1,0 +1,6 @@
+@CatanBoardGenerator_HostAddress = http://localhost:5027
+
+GET {{CatanBoardGenerator_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

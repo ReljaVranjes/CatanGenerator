@@ -1,0 +1,249 @@
+/* Main container to split the body into two columns */
+.split-container {
+    display: flex;
+    height: 100vh;
+    background-color: rgb(23, 150, 255); /* Blue background for the entire page */
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevent any overflow */
+  }
+  
+  /* Left panel (title, button, etc.) */
+  .left-panel {
+    flex: 1; /* Take up 1/2 of the screen width */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Align the title to the top */
+    align-items: center;
+    background-color: rgb(0, 103, 187); /* Make sure the left panel has a transparent background */
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+  }
+  
+  .left-panel h1 {
+    font-size: 50px;
+    margin-bottom: 20px; /* Add some space below the title */
+  }
+  
+  /* Button group: contains "Generate Board" and "Options" buttons */
+  .button-group {
+    display: flex;
+    gap: 10px; /* Add some space between the two buttons */
+    margin-bottom: 20px; /* Add space below the button group */
+  }
+  
+  button {
+    background: linear-gradient(45deg, #4caf50, #8bc34a);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-size: 24px; /* Adjust button font size */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    outline: none;
+  }
+  
+  button:hover {
+    background: linear-gradient(45deg, #8bc34a, #4caf50);
+    transform: scale(1.05);
+  }
+  
+  button:focus {
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Specific button styling */
+  .generate-board-btn {
+    font-size: 24px;
+  }
+  
+  .options-btn {
+    font-size: 24px;
+  }
+  
+  .generate-order-btn {
+    margin-top: 10px;
+    font-size: 24px;
+  }
+  
+  /* Right panel (images) */
+  .right-panel {
+    flex: 2; /* Take up 2/3 of the screen width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent; /* Ensure the right panel is transparent */
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  /* Container and image styling */
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+  }
+  
+  .image-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .image-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  
+  img {
+    width: 100%;
+    height: auto;
+  }
+  
+  /* Dice number styling */
+  .dice-number {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background-color: #fff;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    border: 2px solid #333;
+  }
+  
+  .red-dice-number {
+    background-color: red;
+    color: white;
+  }
+  
+  .hide-if-zero {
+    display: none;
+  }
+  
+  /* Media queries for responsive design */
+  @media (max-width: 600px) {
+    img {
+      max-width: 80px;
+    }
+  
+    .dice-number {
+      width: 25px;
+      height: 25px;
+      font-size: 1rem;
+    }
+  }
+  
+  @media (min-width: 601px) and (max-width: 1200px) {
+    img {
+      max-width: 150px;
+    }
+  
+    .dice-number {
+      width: 30px;
+      height: 30px;
+      font-size: 1.2rem;
+    }
+  }
+  
+  @media (min-width: 1201px) {
+    img {
+      max-width: 250px;
+    }
+  
+    .dice-number {
+      width: 50px;
+      height: 50px;
+      font-size: 1.5rem;
+    }
+  }
+
+/* Overall container with large border */
+.order-of-play-box {
+    border: 5px solid rgb(51, 50, 50); /* Large border around all players */
+    padding: 20px;
+    background-color: rgb(223, 221, 221);
+    margin-top: 20px;
+    border-radius: 10px;
+    width: 80%; /* Adjust as needed */
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Player list items with individual borders */
+  .player-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    color: black;
+    border: 5px solid black;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+  }
+  
+  /* Home icon styling */
+  .player-icon {
+    font-size: 5.5rem;
+    color: inherit; /* Inherit color from the player class */
+  }
+  
+  /* Styling for text */
+  .player-text {
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 50px;
+    font-weight: bold;
+  }
+  
+  /* Player color classes */
+  .player-white {
+    height: 100px;
+    border-color: white;
+    background-color: white;
+  }
+  
+  .player-blue {
+    height: 100px;
+    border-color: rgb(98, 207, 243);;
+    background-color: rgb(98, 207, 243);
+  }
+  
+  .player-red {
+    height: 100px;
+    border-color: rgb(250, 108, 108);
+    background-color: rgb(250, 108, 108);
+  }
+  
+  .player-orange {
+    height: 100px;
+    border-color: lightsalmon;
+    background-color: lightsalmon;
+  }
+  
+  /* Optional: Adjust for mobile responsiveness */
+  @media (max-width: 600px) {
+    .order-of-play-box {
+      width: 100%; /* Full width on small screens */
+    }
+  
+    .player-item {
+      font-size: 1rem;
+    }
+  
+    .player-icon {
+      font-size: 1.2rem;
+    }
+  }
+  
+  
+  
