@@ -1,7 +1,11 @@
 ﻿using CatanBoardGenerator.Model;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.PortableExecutable;
 
 namespace CatanBoardGenerator.Controllers
 {
@@ -38,9 +42,9 @@ namespace CatanBoardGenerator.Controllers
 
 
         [HttpGet(Name = "GetBoard")]
-        public IActionResult GetBoard([FromQuery] bool sixAndEightCanTouch, [FromQuery] bool sameNumbers, [FromQuery] bool sameResources)
+        public IActionResult GetBoard([FromQuery] bool sixAndEightCanTouch, [FromQuery] bool sameNumbers, [FromQuery] bool sameTypes)
         {
-            Console.WriteLine(sixAndEightCanTouch);
+            Console.WriteLine("SAME TYPES: " + sameTypes);
             var random = new Random();
 
             var shuffledTypes = TileTypes.OrderBy(x => random.Next()).ToList();
@@ -61,8 +65,8 @@ namespace CatanBoardGenerator.Controllers
                 Tiles.Add(tile);
             }
 
-            if(!sixAndEightCanTouch) { Remove6and8AsNeighbours(Tiles); }
-
+            if(!sixAndEightCanTouch) { Remove6and8Touching(Tiles); }
+            if(!sameTypes) { RemoveTouchingTypes(Tiles); }
 
             return Ok(Tiles);
         }
@@ -135,7 +139,7 @@ namespace CatanBoardGenerator.Controllers
             return positionsToChange;
         }
 
-        private bool Are6and8Neighbours(List<Tile> tiles)
+        private bool Are6and8Touching(List<Tile> tiles)
         {
             foreach (var tile in tiles)
             {
@@ -153,11 +157,12 @@ namespace CatanBoardGenerator.Controllers
             return true;
         }
 
-        private void Remove6and8AsNeighbours(List<Tile> tiles)
+        //Display board without 6 and 8 touching
+        private void Remove6and8Touching(List<Tile> tiles)
         {
             Random random = new Random();
 
-            while (!Are6and8Neighbours(tiles))
+            while (!Are6and8Touching(tiles))
             {
                 var availablePositions = GetAvailablePositions6and8(tiles);
                 var positionsToChange = GetSurroundings6and8(tiles);
@@ -181,6 +186,127 @@ namespace CatanBoardGenerator.Controllers
 
         }
 
+        private bool AreSameTypesTouching(List<Tile> tiles)
+        {
+            foreach (var tile in tiles)
+            {
+                foreach (var surroundingTileId in SurroundingTiles[tile.Id])
+                {
+                    if (tiles[surroundingTileId].Type == tile.Type)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        //Get frequency of each tile touching its type
+        private Dictionary<int, List<int>> GetTouchingTypes(List<Tile> tiles)
+        {
+            var positionsToChange = new Dictionary<int, List<int>>();
+
+            foreach (var tile in tiles)
+            {
+                    foreach (var surroundingTileId in SurroundingTiles[tile.Id])
+                    {
+                        if (!positionsToChange.ContainsKey(tile.Id))
+                        {
+                            positionsToChange[tile.Id] = new List<int>();
+                        }
+
+                        if (tiles[surroundingTileId].Type == tile.Type)
+                        {
+                            positionsToChange[tile.Id].Add(surroundingTileId);
+                        }
+                    }
+            }
+            foreach (var kvp in positionsToChange)
+            {
+                Console.Write($"Key {kvp.Key}: {tiles[kvp.Key].Type} ");
+                Console.WriteLine(string.Join(", ", kvp.Value));
+            }
+            Console.Write("******************************\n");
+            return positionsToChange;
+        }
+
+        //For each type, get available positions
+        private Dictionary<string, List<int>> GetAvailablePositionsForTypes(List<Tile> tiles)
+        {
+            var availablePositionsInd = new List<int> {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 };
+            var availablePositionsDict = new Dictionary<string, List<int>>()
+            {
+                { "Field", new List<int>() },
+                { "Mountain", new List<int>() },
+                { "Hill", new List<int>() },
+                { "Pasture", new List<int>() },
+                { "Forest", new List<int>() },
+            };
+
+
+            var fieldPositions = Enumerable.Range(0, tiles.Count).Where(i => tiles[i].Type == "Field").ToList();
+            var mountainPositions = Enumerable.Range(0, tiles.Count).Where(i => tiles[i].Type == "Mountain").ToList();
+            var hillPositions = Enumerable.Range(0, tiles.Count).Where(i => tiles[i].Type == "Hill").ToList();
+            var pasturePositions = Enumerable.Range(0, tiles.Count).Where(i => tiles[i].Type == "Pasture").ToList();
+            var forestPositions = Enumerable.Range(0, tiles.Count).Where(i => tiles[i].Type == "Forest").ToList();
+            var desertPosition = 0;
+
+            //Add surrounding tiles of each type
+            foreach (var tile in tiles) 
+            { 
+                if(tile.Type == "Field") { fieldPositions.AddRange(SurroundingTiles[tile.Id]); }
+                else if (tile.Type == "Mountain") { mountainPositions.AddRange(SurroundingTiles[tile.Id]); }
+                else if(tile.Type == "Hill") { hillPositions.AddRange(SurroundingTiles[tile.Id]); }
+                else if(tile.Type == "Pasture") { pasturePositions.AddRange(SurroundingTiles[tile.Id]); }
+                else if(tile.Type == "Forest") { forestPositions.AddRange(SurroundingTiles[tile.Id]); }
+                else if(tile.Type == "Desert") { availablePositionsInd.RemoveAt(tile.Id); }
+            }
+             
+            //Filter positions that are not surrounded by certain type
+            availablePositionsDict["Field"] = availablePositionsInd.Except(fieldPositions).ToList();
+            availablePositionsDict["Mountain"] = availablePositionsInd.Except(mountainPositions).ToList();
+            availablePositionsDict["Hill"] = availablePositionsInd.Except(hillPositions).ToList();
+            availablePositionsDict["Pasture"] = availablePositionsInd.Except(pasturePositions).ToList();
+            availablePositionsDict["Forest"] = availablePositionsInd.Except(forestPositions).ToList();
+            
+            foreach (var kvp in availablePositionsDict)
+            {
+                Console.Write($"Key {kvp.Key}: ");
+                Console.WriteLine(string.Join(", ", kvp.Value));
+            }
+            Console.Write("******************************\n");
+            return availablePositionsDict;
+        }
+
+        //Display board without same types touching
+        private void RemoveTouchingTypes(List<Tile> tiles)
+        {
+            Random random = new Random();
+
+            while(!AreSameTypesTouching(tiles)) {
+                var availablePositionsDict = GetAvailablePositionsForTypes(tiles);
+                var touchingTypesTilesDict = GetTouchingTypes(tiles);
+
+                var TileWithMostTouches = touchingTypesTilesDict
+                .OrderByDescending(kvp => kvp.Value.Count)
+                .FirstOrDefault();
+
+                var MostTouchedType = tiles[TileWithMostTouches.Key].Type;
+                Console.WriteLine("SELECTED : " + MostTouchedType);
+
+
+                var availablePositions = availablePositionsDict[MostTouchedType];
+                var randomAvaliableTile = availablePositions[random.Next(availablePositions.Count)];
+
+                Console.WriteLine("CHANGING TO " + randomAvaliableTile);
+
+                tiles[TileWithMostTouches.Key].Type = tiles[randomAvaliableTile].Type;
+                tiles[randomAvaliableTile].Type = MostTouchedType;
+
+                Console.WriteLine("SWITCHED " + TileWithMostTouches.Key + " AND " + randomAvaliableTile);
+            }
+        }
+
         [HttpGet("OrderOfPlay")]
         public IActionResult GetOrderOfPlay()
         {
@@ -189,5 +315,7 @@ namespace CatanBoardGenerator.Controllers
               
             return Ok(shuffledPlayers);
         }
+
+
     }
 }

@@ -22,14 +22,14 @@ export class AppComponent {
   orderOfPlay: string[] = [];
   sixAndEightCanTouch = true;
   sameNumbers = true;
-  sameResources = true;
+  sameTypes = true;
 
   GenerateBoard(): void {
     // Construct query parameters based on checkbox values
     const params = new HttpParams()
       .set('sixAndEightCanTouch', this.sixAndEightCanTouch.toString())
       .set('sameNumbers', this.sameNumbers.toString())
-      .set('sameResources', this.sameResources.toString());
+      .set('sameTypes', this.sameTypes.toString());
   
     // Send HTTP GET request with parameters
     this.http.get<Tile[]>('https://localhost:7154/api/Tile', { params }).subscribe({
