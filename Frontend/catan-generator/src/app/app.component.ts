@@ -6,6 +6,8 @@ import { Tile } from '../models/tile.model';
 import { FormsModule } from '@angular/forms';
 
 
+
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -43,6 +45,38 @@ export class AppComponent {
       }
     });
   }
+  
+  calculatePercentages() {
+    const diceFrequencyMap: { [key: string]: number } = {
+      2: 1, 3: 2, 4: 3, 5: 4, 6: 5, 8: 5, 9: 4, 10: 3, 11: 2, 12: 1
+    };
+  
+    let frequencyCount: { [key: string]: number } = {};
+  
+    // Exclude Desert and calculate the frequency
+    this.tiles
+      .filter(tile => tile.type !== 'Desert')  // Filter out Desert tiles
+      .forEach(tile => {
+        if (!frequencyCount[tile.type]) {
+          frequencyCount[tile.type] = 0;
+        }
+        const diceValue = diceFrequencyMap[tile.diceNumber.toString()] || 0;
+        frequencyCount[tile.type] += diceValue;
+      });
+  
+    let percentages: { type: string, percentage: number }[] = [];
+  
+    for (const type in frequencyCount) {
+      const percentage = (frequencyCount[type] / 36) * 100;
+      percentages.push({ type, percentage: parseFloat(percentage.toFixed(2)) });
+    }
+  
+    // Sort percentages by descending order
+    percentages.sort((a, b) => b.percentage - a.percentage);
+  
+    return percentages;
+  }
+  
   
 
   generateRows() {

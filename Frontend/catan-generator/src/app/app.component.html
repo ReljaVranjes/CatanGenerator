@@ -6,17 +6,15 @@
         <button class="generate-board-btn" (click)="GenerateBoard()">Generate Board</button>
         <button class="options-btn" (click)="openOptions()">Options</button>
       </div>
-  
-      <button class="generate-order-btn" (click)="GenerateOrderOfPlay()">Generate Order of Play</button>
-  
-      <!-- Order of Play Box with Borders -->
-      <div *ngIf="orderOfPlay && orderOfPlay.length > 0" class="order-of-play-box">
-        <div *ngFor="let player of orderOfPlay; let i = index" class="player-item" [ngClass]="getPlayerColorClass(player)">
-          <span class="player-text">{{ i + 1 }}. {{ player }}</span>
-          <!-- Home Icon (example using Font Awesome) -->
-          <i class="fas fa-home player-icon"></i>
+      
+      <div *ngIf="tiles && tiles.length > 0" class="tile-percentage-box">
+        <div *ngFor="let percentage of calculatePercentages()" class="percentage-item ">
+          <span class="percentage-text">{{ percentage.type }}: {{ percentage.percentage }}%</span>
+          <!-- Optional: You can add an icon or visual representation here, similar to the Home icon in the player list -->
+          <i class="fas fa-percentage player-icon"></i>
         </div>
       </div>
+      
     </div>
   
     <div class="right-panel">

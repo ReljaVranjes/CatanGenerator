@@ -65,8 +65,9 @@ namespace CatanBoardGenerator.Controllers
                 Tiles.Add(tile);
             }
 
-            if(!sixAndEightCanTouch) { Remove6and8Touching(Tiles); }
-            if(!sameTypes) { RemoveTouchingTypes(Tiles); }
+            if (!sameNumbers) { RemoveTouchingNumbers(Tiles); }
+            if (!sameTypes) { RemoveTouchingTypes(Tiles); }
+            if (!sixAndEightCanTouch) { Remove6and8Touching(Tiles); }
 
             return Ok(Tiles);
         }
@@ -249,7 +250,6 @@ namespace CatanBoardGenerator.Controllers
             var hillPositions = Enumerable.Range(0, tiles.Count).Where(i => tiles[i].Type == "Hill").ToList();
             var pasturePositions = Enumerable.Range(0, tiles.Count).Where(i => tiles[i].Type == "Pasture").ToList();
             var forestPositions = Enumerable.Range(0, tiles.Count).Where(i => tiles[i].Type == "Forest").ToList();
-            var desertPosition = 0;
 
             //Add surrounding tiles of each type
             foreach (var tile in tiles) 
@@ -306,6 +306,52 @@ namespace CatanBoardGenerator.Controllers
                 Console.WriteLine("SWITCHED " + TileWithMostTouches.Key + " AND " + randomAvaliableTile);
             }
         }
+
+        private bool AreNumbersTouching(List<Tile> tiles) {
+            foreach (var tile in tiles)
+            {
+                foreach (var surroundingTileId in SurroundingTiles[tile.Id])
+                {
+                    if (tiles[surroundingTileId].DiceNumber == tile.DiceNumber)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        private void RemoveTouchingNumbers(List<Tile> tiles)
+        {
+            Random random = new Random();
+
+            while (!AreNumbersTouching(tiles))
+            { 
+                foreach(var tile in tiles)
+                {
+                    foreach (var surroundingTileId in SurroundingTiles[tile.Id])
+                    {
+                        if (tiles[surroundingTileId].DiceNumber == tile.DiceNumber)
+                        {
+                            var availablePositions = GetAvailablePositionsForTile(tile.Id);
+                            var randomPosition = availablePositions[random.Next(availablePositions.Count)];
+                            var diceNumber = tile.DiceNumber;
+
+                            tile.DiceNumber = tiles[randomPosition].DiceNumber;
+                            tiles[randomPosition].DiceNumber = diceNumber;
+                        }
+                    }
+                }
+            }
+        }
+
+        private List<int> GetAvailablePositionsForTile(int tileId) 
+        { 
+            var availablePositions = new List<int>() { 0,1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18};
+
+            return availablePositions.Except(SurroundingTiles[tileId]).ToList();
+        }
+
 
         [HttpGet("OrderOfPlay")]
         public IActionResult GetOrderOfPlay()

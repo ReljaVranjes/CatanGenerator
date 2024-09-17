@@ -260,35 +260,59 @@ input[type="checkbox"]:checked + .custom-checkbox::before {
   }
 
 /* Overall container with large border */
-.order-of-play-box {
-    border: 5px solid rgb(51, 50, 50); /* Large border around all players */
-    padding: 20px;
-    background-color: rgb(223, 221, 221);
-    margin-top: 20px;
-    border-radius: 10px;
-    width: 80%; /* Adjust as needed */
-    margin-left: auto;
-    margin-right: auto;
+/* Tile Percentages Box - Similar to Order of Play Box */
+.tile-percentage-box {
+  border: 5px solid rgb(51, 50, 50); /* Keep the large border */
+  padding: 20px;
+  background-color: rgb(223, 221, 221);
+  margin-top: 20px;
+  border-radius: 10px;
+  width: 80%; /* Adjust as needed */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Tile Percentage item (similar to player-item) */
+.percentage-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  color: black;
+  border: 5px solid black;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+/* Tile Type and Percentage styling */
+.percentage-text {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 50px;
+  font-weight: bold;
+}
+
+/* Percentage Icon Styling (optional, similar to the player-icon) */
+.player-icon {
+  font-size: 5.5rem;
+  color: inherit; /* Inherit color */
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  .order-of-play-box {
+    width: 100%; /* Full width on small screens */
   }
-  
-  /* Player list items with individual borders */
+
   .player-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: white;
-    color: black;
-    border: 5px solid black;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
+    font-size: 1rem;
   }
-  
-  /* Home icon styling */
+
   .player-icon {
-    font-size: 5.5rem;
-    color: inherit; /* Inherit color from the player class */
+    font-size: 1.2rem;
   }
+}
+
   
   /* Styling for text */
   .player-text {
