@@ -1,4 +1,96 @@
-/* Main container to split the body into two columns */
+/* Modal container */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed;
+  z-index: 1000; /* Ensure it appears above everything */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  display: flex; /* Use flexbox to center */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+}
+
+/* Modal content */
+.modal-content {
+  border: 3px solid black;
+  background-color: #ffebcc; /* Light orange background */
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 80%;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+
+/* Modal title */
+.modal-title {
+  font-size: 3rem;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 20px;
+  font-family: Arial, sans-serif;
+  font-size: 30px;
+}
+
+/* Checkbox styling */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  font-size: large;
+}
+
+.checkbox-container label {
+  font-size: 2.2rem;
+  color: #333;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  cursor: pointer;
+}
+
+input[type="checkbox"] {
+  display: none; /* Hide the default checkbox */
+}
+
+.custom-checkbox {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #333;
+  border-radius: 3px;
+  margin-right: 10px;
+  vertical-align: middle;
+  position: relative;
+}
+
+input[type="checkbox"]:checked + .custom-checkbox::before {
+  content: "\2713"; /* Checkmark symbol */
+  position: absolute;
+  left: 3px;
+  top: -3px;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+/* Close button */
+.close-btn {
+  background: #ff7f50;
+  border: none;
+  padding: 10px 20px;
+  color: white;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.close-btn:hover {
+  background: #ff6347; /* Darker coral */
+}
+
 .split-container {
     display: flex;
     height: 100vh;

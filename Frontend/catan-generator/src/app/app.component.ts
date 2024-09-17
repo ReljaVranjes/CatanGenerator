@@ -1,13 +1,15 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule,HttpParams } from '@angular/common/http';
 import { CommonModule } from '@angular/common'; // Import CommonModule
 import { Tile } from '../models/tile.model';
+import { FormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HttpClientModule, CommonModule], // Add CommonModule here
+  imports: [RouterOutlet, HttpClientModule, CommonModule,FormsModule], // Add CommonModule here
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
@@ -18,9 +20,19 @@ export class AppComponent {
   tiles: Tile[] = [];
   rows: Tile[][] = [];
   orderOfPlay: string[] = [];
+  sixAndEightCanTouch = true;
+  sameNumbers = true;
+  sameResources = true;
 
   GenerateBoard(): void {
-    this.http.get<Tile[]>('https://localhost:7154/api/Tile').subscribe({
+    // Construct query parameters based on checkbox values
+    const params = new HttpParams()
+      .set('sixAndEightCanTouch', this.sixAndEightCanTouch.toString())
+      .set('sameNumbers', this.sameNumbers.toString())
+      .set('sameResources', this.sameResources.toString());
+  
+    // Send HTTP GET request with parameters
+    this.http.get<Tile[]>('https://localhost:7154/api/Tile', { params }).subscribe({
       next: (data: Tile[]) => {
         this.tiles = data;
         console.log('Tiles fetched successfully:', this.tiles);
@@ -31,6 +43,7 @@ export class AppComponent {
       }
     });
   }
+  
 
   generateRows() {
     const rowSizes = [3, 4, 5, 4, 3];
@@ -52,7 +65,6 @@ export class AppComponent {
       'Pasture': 'images/pasture.png',
       'Desert': 'images/desert.png'
     };
-    console.log(type);
     return imageMap[type] || 'default.png'; // Provide a default image if type is unknown
   }
 
@@ -93,7 +105,20 @@ export class AppComponent {
         return '';
     }
   }
+
+  openOptions() {
+    const modal = document.getElementById('optionsModal');
+    if (modal) {
+      modal.style.display = 'flex';
+    }
+  }
   
+  closeOptions() {
+    const modal = document.getElementById('optionsModal');
+    if (modal) {
+      modal.style.display = 'none';
+    }
+  }
   
   
 }

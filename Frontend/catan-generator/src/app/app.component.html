@@ -4,7 +4,7 @@
   
       <div class="button-group">
         <button class="generate-board-btn" (click)="GenerateBoard()">Generate Board</button>
-        <button class="options-btn">Options</button>
+        <button class="options-btn" (click)="openOptions()">Options</button>
       </div>
   
       <button class="generate-order-btn" (click)="GenerateOrderOfPlay()">Generate Order of Play</button>
@@ -39,4 +39,36 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal Structure -->
+<div id="optionsModal" class="modal" style="display:none">
+  <div class="modal-content">
+    <h2 class="modal-title">Options</h2>
+    <form>
+      <div class="checkbox-container">
+        <label>
+          <input type="checkbox" id="sixAndEightCanTouch" [(ngModel)]="sixAndEightCanTouch" [ngModelOptions]="{standalone: true}"/>
+          <span class="custom-checkbox"></span>
+          6 & 8 Can Touch
+        </label>
+      </div>
+      <div class="checkbox-container">
+        <label>
+          <input type="checkbox" id="sameNumbers" [(ngModel)]="sameNumbers" [ngModelOptions]="{standalone: true}"/>
+          <span class="custom-checkbox"></span>
+          Same Numbers Can Touch
+        </label>
+      </div>
+      <div class="checkbox-container">
+        <label>
+          <input type="checkbox" id="sameResources" [(ngModel)]="sameResources" [ngModelOptions]="{standalone: true}"/>
+          <span class="custom-checkbox"></span>
+          Same Resource Can Touch
+        </label>
+      </div>
+    </form>
+    <button class="close-btn" (click)="closeOptions()">Close</button>
+  </div>
+</div>
+
   
