@@ -272,7 +272,7 @@ input[type="checkbox"]:checked + .custom-checkbox::before {
   margin-right: auto;
 }
 
-/* Tile Percentage item (similar to player-item) */
+
 .percentage-item {
   display: flex;
   justify-content: space-between;
@@ -292,26 +292,6 @@ input[type="checkbox"]:checked + .custom-checkbox::before {
   font-weight: bold;
 }
 
-/* Percentage Icon Styling (optional, similar to the player-icon) */
-.player-icon {
-  font-size: 5.5rem;
-  color: inherit; /* Inherit color */
-}
-
-/* Mobile responsiveness */
-@media (max-width: 600px) {
-  .order-of-play-box {
-    width: 100%; /* Full width on small screens */
-  }
-
-  .player-item {
-    font-size: 1rem;
-  }
-
-  .player-icon {
-    font-size: 1.2rem;
-  }
-}
 
   
   /* Styling for text */
@@ -321,45 +301,6 @@ input[type="checkbox"]:checked + .custom-checkbox::before {
     font-weight: bold;
   }
   
-  /* Player color classes */
-  .player-white {
-    height: 100px;
-    border-color: white;
-    background-color: white;
-  }
-  
-  .player-blue {
-    height: 100px;
-    border-color: rgb(98, 207, 243);;
-    background-color: rgb(98, 207, 243);
-  }
-  
-  .player-red {
-    height: 100px;
-    border-color: rgb(250, 108, 108);
-    background-color: rgb(250, 108, 108);
-  }
-  
-  .player-orange {
-    height: 100px;
-    border-color: lightsalmon;
-    background-color: lightsalmon;
-  }
-  
-  /* Optional: Adjust for mobile responsiveness */
-  @media (max-width: 600px) {
-    .order-of-play-box {
-      width: 100%; /* Full width on small screens */
-    }
-  
-    .player-item {
-      font-size: 1rem;
-    }
-  
-    .player-icon {
-      font-size: 1.2rem;
-    }
-  }
   
   
   
