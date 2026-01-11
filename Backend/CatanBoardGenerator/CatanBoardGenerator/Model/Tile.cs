@@ -1,5 +1,5 @@
 ﻿namespace CatanBoardGenerator.Model
-{
+{//TILE UAN MEN SHOU
     public class Tile
     {
         public int Id { get; set; }
